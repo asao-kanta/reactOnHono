@@ -1,0 +1,14 @@
+{
+	"extends": "../tsconfig.base.json",
+	"compilerOptions": {
+		"rootDir": "src",
+		"outDir": "dist-api",
+		"baseUrl": ".",
+		"skipLibCheck": true,
+		"types": ["node"],
+		"module": "CommonJS",
+		"target": "ES2020",
+		"esModuleInterop": true
+	},
+	"include": ["src/**/*.ts"]
+}

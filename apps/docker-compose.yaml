@@ -1,0 +1,63 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: todo
+      MYSQL_USER: user
+      MYSQL_PASSWORD: password
+    volumes:
+      - mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    restart: always
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      timeout: 20s
+      retries: 10
+
+  migrate:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=mysql://user:password@db:3306/todo
+    volumes:
+      - ./api/src:/app/api/src
+      - api_node_modules:/app/api/node_modules
+    working_dir: /app/api
+    command: >
+      sh -c "
+        echo 'Waiting for database to be ready...' &&
+        sleep 5 &&
+        npx prisma db push --schema=./src/prisma/schema.prisma &&
+        echo 'Database schema synchronized successfully'
+      "
+    depends_on:
+      db:
+        condition: service_healthy
+
+  api:
+    platform: linux/amd64
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - DATABASE_URL=mysql://user:password@db:3306/todo
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./api/src:/app/api/src
+      - api_node_modules:/app/api/node_modules
+    working_dir: /app/api
+    command: npm run dev
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+volumes:
+  mysql_data:
+  api_node_modules:

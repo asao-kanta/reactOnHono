@@ -1,0 +1,56 @@
+{
+	"$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+	"vcs": {
+		"enabled": false,
+		"clientKind": "git",
+		"useIgnoreFile": false
+	},
+	"files": {
+		"ignoreUnknown": false,
+		"ignore": [
+			"**/node_modules/**",
+			"**/dist/**",
+			"**/dist-*/**",
+			"**/build/**",
+			"**/.git/**",
+			"**/.DS_Store",
+			"**/package-lock.json",
+			"**/yarn.lock",
+			"**/pnpm-lock.yaml",
+			"**/Dockerfile*",
+			"**/docker-compose*.yaml",
+			"**/docker-compose*.yml",
+			"**/*.log",
+			"**/.env*",
+			"**/coverage/**",
+			"**/.nyc_output/**",
+			"**/lib/**",
+			"**/prisma/migrations/**",
+			"**/schema/zod/**",
+			"**/*.d.ts",
+			"**/lambda.js",
+			"**/tsconfig*.json",
+			"**/package.json",
+			"**/biome.json",
+			"**/vite.config.ts"
+		]
+	},
+	"formatter": {
+		"enabled": true,
+		"indentStyle": "tab"
+	},
+	"organizeImports": {
+		"enabled": true
+	},
+	"linter": {
+		"enabled": true,
+		"rules": {
+			"recommended": true
+		}
+	},
+	"javascript": {
+		"formatter": {
+			"quoteStyle": "double"
+		}
+	}
+}

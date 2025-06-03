@@ -1,0 +1,33 @@
+{
+	"name": "api",
+	"scripts": {
+		"dev": "tsx src/node.ts",
+		"dev:lambda": "tsx src/lambda.ts",
+		"build": "tsc && cp -r src/prisma dist/",
+		"build:lambda": "npm run build",
+		"start": "node dist/node.js"
+	},
+	"dependencies": {
+		"@aws-sdk/client-secrets-manager": "^3.817.0",
+		"@hono/node-server": "^1.14.2",
+		"@hono/zod-openapi": "^0.19.6",
+		"@hono/zod-validator": "^0.5.0",
+		"@prisma/client": "^6.8.2",
+		"express-session": "^1.18.1",
+		"hono": "^4.7.10",
+		"jsonwebtoken": "^9.0.2",
+		"jwks-rsa": "^3.2.0",
+		"prisma": "^6.8.2",
+		"simple-oauth2": "^5.1.0",
+		"ts-node": "^10.9.2",
+		"tsx": "^4.19.4",
+		"zod-prisma-types": "^3.2.4"
+	},
+	"devDependencies": {
+		"@types/bun": "latest",
+		"@types/express-session": "^1.18.1",
+		"@types/jsonwebtoken": "^9.0.9",
+		"@types/node": "^22.15.21",
+		"@types/simple-oauth2": "^5.0.7"
+	}
+}

@@ -1,0 +1,69 @@
+version: '3'
+
+tasks:
+  generate-schemas:
+    desc: Generate zod schemas from openapi.yaml
+    dir: .
+    cmds:
+      - npx openapi-zod-client docs/tsp-output/schema/openapi.yaml -o apps/api/src/lib/openapi-generated.ts -t schemas-only.hbs --export-schemas
+
+  build-web:
+    desc: Build web frontend
+    dir: apps/web
+    cmds:
+      - npm install
+      - npm run build
+    sources:
+      - src/**/*
+      - package.json
+      - vite.config.ts
+      - tsconfig.json
+    generates:
+      - dist/**/*
+
+  deploy-web:
+    desc: Copy web build files to API directory
+    deps: [build-web]
+    dir: .
+    cmds:
+      - rm -rf apps/api/dist
+      - cp -r apps/web/dist apps/api/dist
+      - echo "✅ Web build files deployed to apps/api/dist"
+
+  setup-web:
+    desc: Setup web development environment
+    deps: [build-web, deploy-web]
+
+  build-api:
+    desc: Build API backend
+    dir: apps/api
+    cmds:
+      - npm install
+      - npx prisma generate --schema=./src/prisma/schema.prisma
+      - npm run build
+    sources:
+      - src/**/*
+      - package.json
+      - tsconfig.json
+    generates:
+      - dist/**/*
+
+  build-all:
+    desc: Build both web and API, then deploy web to API
+    deps: [build-web, build-api, deploy-web]
+
+  dev-api:
+    desc: Start API development server
+    dir: apps/api
+    cmds:
+      - npm run dev
+
+  dev-web:
+    desc: Start web development server
+    dir: apps/web
+    cmds:
+      - npm run dev
+
+  dev:
+    desc: Start both web and API development servers
+    deps: [dev-api, dev-web]
